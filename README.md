@@ -39,7 +39,7 @@ const authRoutes = createAuthRoutes({
 
 Looking For | Points (10)
 :--|--:
-[]SERVER: Deployed GET todos route correctly enforces user-specific actions | 3
-[]SERVER: Deployed POST todos route correctly enforces user-specific actions | 2
+[x]SERVER: Deployed GET todos route correctly enforces user-specific actions | 3
+[x]SERVER: Deployed POST todos route correctly enforces user-specific actions | 2
 []SERVER: Deployed PUT todos route correctly enforces user-specific actions | 2
 []TESTS: Add Jest test for success states in GET, POST, and PUT routes| 3
