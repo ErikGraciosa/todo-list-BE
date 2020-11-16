@@ -23,7 +23,6 @@ describe('app routes', () => {
         });
       
       token = signInData.body.token; // eslint-disable-line
-  
       return done();
     });
   
@@ -31,26 +30,26 @@ describe('app routes', () => {
       return client.end(done);
     });
 
-    test('returns todos', async() => {
+    test('Testing /GET for /todos, must return current todo list', async() => {
 
       const expectation = [
         {
-          'id': 1,
-          'name': 'bessie',
-          'coolfactor': 3,
-          'owner_id': 1
+          id: 1,
+          todo: 'Mail Letter',
+          completed: false,
+          owner_id: 1
         },
         {
-          'id': 2,
-          'name': 'jumpy',
-          'coolfactor': 4,
-          'owner_id': 1
+          id: 2,
+          todo: 'Wash Car',
+          completed: false,
+          owner_id: 1
         },
         {
-          'id': 3,
-          'name': 'spot',
-          'coolfactor': 10,
-          'owner_id': 1
+          id: 3,
+          todo: 'Rake Leaves',
+          completed: false,
+          owner_id: 1
         }
       ];
 
@@ -59,6 +58,75 @@ describe('app routes', () => {
         .expect('Content-Type', /json/)
         .expect(200);
 
+      expect(data.body).toEqual(expectation);
+    });
+
+
+    test('Testing /POST for /api/todos, must post to the db and verify data saved', async() => {
+
+      const expectation = [
+        {
+          id: 4,
+          todo: 'Feed Garfield',
+          completed: false,
+          owner_id: 2
+        },
+      ];
+
+      const data = await fakeRequest(app)
+        .post('/api/todos')
+        .set({ Authorization: token })
+        .send({
+          todo: 'Feed Garfield',
+          completed: false,
+        })
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(data.body).toEqual(expectation);
+    });
+
+
+
+
+    test('Testing /GET for /api/todos, must return current todo list for user', async() => {
+
+      const expectation = [
+        {
+          id: 4,
+          todo: 'Feed Garfield',
+          completed: false,
+          owner_id: 2
+        }
+      ];
+
+      const data = await fakeRequest(app)
+        .get('/api/todos')
+        .set({ Authorization: token })
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      expect(data.body).toEqual(expectation);
+    });
+
+
+    test('Testing /PUT for /api/todos/:id, will return single item and flip \'completed\' to true', async() => {
+
+      const expectation = [
+        {
+          id: 4,
+          todo: 'Feed Garfield',
+          completed: true,
+          owner_id: 2
+        }
+      ];
+
+      const data = await fakeRequest(app)
+        .put('/api/todos/4')
+        .set({ Authorization: token })
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
       expect(data.body).toEqual(expectation);
     });
   });
